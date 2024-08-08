@@ -2,6 +2,7 @@
 
 #include "AnimationsHandbook/Public/Animations/AnimInstance/AnimationsHandbookAnimInstance.h"
 #include "GameFramework/Character.h"
+#include "Kismet/KismetMathLibrary.h"
 
 void UAnimationsHandbookAnimInstance::NativeInitializeAnimation()
 {
@@ -12,6 +13,11 @@ void UAnimationsHandbookAnimInstance::NativeInitializeAnimation()
 		FVector HorizontalVelocity = OwnerCharacter->GetVelocity();
 		HorizontalVelocity.Z = 0.f;
 		Speed = HorizontalVelocity.Size();
+
+		const FRotator AimRotation = OwnerCharacter->GetBaseAimRotation();
+		const FRotator MovementRotation = UKismetMathLibrary::MakeRotFromX(OwnerCharacter->GetVelocity());
+
+		OffsetYaw = UKismetMathLibrary::NormalizedDeltaRotator(MovementRotation, AimRotation).Yaw;
 	}
 }
 
