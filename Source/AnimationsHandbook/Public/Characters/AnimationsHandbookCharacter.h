@@ -6,6 +6,10 @@
 #include "GameFramework/Character.h"
 #include "AnimationsHandbookCharacter.generated.h"
 
+class UInputAction;
+class UInputMappingContext;
+struct FInputActionValue;
+
 UCLASS()
 class ANIMATIONSHANDBOOK_API AAnimationsHandbookCharacter : public ACharacter
 {
@@ -19,4 +23,18 @@ protected:
 
 public:
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
+
+private:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
+	UInputMappingContext* DefaultMappingContext;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
+	UInputAction* MoveAction;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
+	UInputAction* LookAction;
+
+	void Move(const FInputActionValue& Value);
+
+	void Look(const FInputActionValue& Value);
 };

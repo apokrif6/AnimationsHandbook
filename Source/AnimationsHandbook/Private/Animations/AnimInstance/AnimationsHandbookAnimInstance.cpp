@@ -8,6 +8,13 @@ void UAnimationsHandbookAnimInstance::NativeInitializeAnimation()
 {
 	Super::NativeInitializeAnimation();
 
+	OwnerCharacter = Cast<ACharacter>(TryGetPawnOwner());
+}
+
+void UAnimationsHandbookAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
+{
+	Super::NativeUpdateAnimation(DeltaSeconds);
+
 	if (ensure(OwnerCharacter))
 	{
 		FVector HorizontalVelocity = OwnerCharacter->GetVelocity();
@@ -19,11 +26,4 @@ void UAnimationsHandbookAnimInstance::NativeInitializeAnimation()
 
 		OffsetYaw = UKismetMathLibrary::NormalizedDeltaRotator(MovementRotation, AimRotation).Yaw;
 	}
-}
-
-void UAnimationsHandbookAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
-{
-	Super::NativeUpdateAnimation(DeltaSeconds);
-
-	OwnerCharacter = Cast<ACharacter>(TryGetPawnOwner());
 }
