@@ -27,6 +27,9 @@ private:
 	float Speed = 0.f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement", meta=(AllowPrivateAccess = "true"))
+	float LocomotionAngle = 0.f;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement", meta=(AllowPrivateAccess = "true"))
 	float OffsetYaw = 0.f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement", meta=(AllowPrivateAccess = "true"))
