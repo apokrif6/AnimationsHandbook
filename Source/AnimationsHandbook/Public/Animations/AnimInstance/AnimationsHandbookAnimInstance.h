@@ -6,6 +6,8 @@
 #include "Animation/AnimInstance.h"
 #include "AnimationsHandbookAnimInstance.generated.h"
 
+struct FLocomotionDirectionThresholds;
+enum class ELocomotionDirection : uint8;
 /**
  * 
  */
@@ -19,6 +21,9 @@ public:
 
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
+	ELocomotionDirection CalculateLocomotionDirection(const float InLocomotionAngle, const ELocomotionDirection InLocomotionDirection,
+	                                  const FLocomotionDirectionThresholds& LocomotionDirectionThresholds);
+
 private:
 	UPROPERTY()
 	ACharacter* OwnerCharacter;
@@ -28,6 +33,9 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement", meta=(AllowPrivateAccess = "true"))
 	float LocomotionAngle = 0.f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement", meta=(AllowPrivateAccess = "true"))
+	ELocomotionDirection LocomotionDirection;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement", meta=(AllowPrivateAccess = "true"))
 	float OffsetYaw = 0.f;
