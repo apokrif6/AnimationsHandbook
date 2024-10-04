@@ -21,25 +21,29 @@ public:
 
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
-	ELocomotionDirection CalculateLocomotionDirection(const float InLocomotionAngle, const ELocomotionDirection InLocomotionDirection,
-	                                  const FLocomotionDirectionThresholds& LocomotionDirectionThresholds);
+	ELocomotionDirection CalculateLocomotionDirection(const float InLocomotionAngle,
+	                                                  const ELocomotionDirection InLocomotionDirection,
+	                                                  const FLocomotionDirectionThresholds&
+	                                                  LocomotionDirectionThresholds);
+
+protected:
+	UPROPERTY(BlueprintReadOnly, Category = "Movement")
+	float Speed = 0.f;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Movement")
+	float LocomotionAngle = 0.f;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Movement")
+	ELocomotionDirection LocomotionDirection;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Movement")
+	float OffsetYaw = 0.f;
+
+
+	UPROPERTY(BlueprintReadOnly, Category = "Movement")
+	bool bIsAccelerating = false;
 
 private:
 	UPROPERTY()
-	ACharacter* OwnerCharacter;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement", meta=(AllowPrivateAccess = "true"))
-	float Speed = 0.f;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement", meta=(AllowPrivateAccess = "true"))
-	float LocomotionAngle = 0.f;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement", meta=(AllowPrivateAccess = "true"))
-	ELocomotionDirection LocomotionDirection;
-	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement", meta=(AllowPrivateAccess = "true"))
-	float OffsetYaw = 0.f;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement", meta=(AllowPrivateAccess = "true"))
-	bool bIsAccelerating = false;
+	TObjectPtr<ACharacter> OwnerCharacter;
 };
