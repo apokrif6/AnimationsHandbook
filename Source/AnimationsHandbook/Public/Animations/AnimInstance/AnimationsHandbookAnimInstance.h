@@ -39,7 +39,6 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Movement")
 	float OffsetYaw = 0.f;
 
-
 	UPROPERTY(BlueprintReadOnly, Category = "Movement")
 	bool bIsAccelerating = false;
 
