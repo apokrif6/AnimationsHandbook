@@ -16,7 +16,7 @@ class ANIMATIONSHANDBOOK_API AAnimationsHandbookCharacter : public ACharacter
 	GENERATED_BODY()
 
 public:
-	AAnimationsHandbookCharacter();
+	explicit AAnimationsHandbookCharacter(const FObjectInitializer& ObjectInitializer);
 
 protected:
 	virtual void BeginPlay() override;
@@ -34,7 +34,14 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
+	UInputAction* SprintAction;
+
 	void Move(const FInputActionValue& Value);
 
 	void Look(const FInputActionValue& Value);
+
+	void EnableRunningMode(const FInputActionValue& Value);
+	
+	void DisableRunningMode(const FInputActionValue& Value);
 };

@@ -2,12 +2,14 @@
 
 
 #include "AnimationsHandbook/Public/Characters/AnimationsHandbookCharacter.h"
-
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Movement/AnimationsHandbookCharacterMovementComponent.h"
 
-AAnimationsHandbookCharacter::AAnimationsHandbookCharacter()
+AAnimationsHandbookCharacter::AAnimationsHandbookCharacter(const FObjectInitializer& ObjectInitializer): Super(
+	ObjectInitializer.SetDefaultSubobjectClass<UAnimationsHandbookCharacterMovementComponent>(
+		CharacterMovementComponentName))
 {
 	PrimaryActorTick.bCanEverTick = false;
 
@@ -42,6 +44,12 @@ void AAnimationsHandbookCharacter::SetupPlayerInputComponent(UInputComponent* Pl
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ThisClass::Move);
 
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ThisClass::Look);
+
+		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Started, this,
+		                                   &ThisClass::EnableRunningMode);
+
+		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this,
+		                                   &ThisClass::DisableRunningMode);
 	}
 }
 
@@ -72,4 +80,14 @@ void AAnimationsHandbookCharacter::Look(const FInputActionValue& Value)
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
+}
+
+void AAnimationsHandbookCharacter::EnableRunningMode(const FInputActionValue& Value)
+{
+	GetCharacterMovement<UAnimationsHandbookCharacterMovementComponent>()->UpdateGait(EGait::Running);
+}
+
+void AAnimationsHandbookCharacter::DisableRunningMode(const FInputActionValue& Value)
+{
+	GetCharacterMovement<UAnimationsHandbookCharacterMovementComponent>()->UpdateGait(EGait::Walking);
 }

@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Movement/AnimationsHandbookCharacterMovementComponent.h"
 
 void UAnimationsHandbookAnimInstance::NativeInitializeAnimation()
 {
@@ -92,4 +93,9 @@ ELocomotionDirection UAnimationsHandbookAnimInstance::CalculateLocomotionDirecti
 	}
 
 	return InLocomotionAngle < 0 ? ELocomotionDirection::Left : ELocomotionDirection::Right;
+}
+
+EGait UAnimationsHandbookAnimInstance::GetCurrentGait() const
+{
+	return OwnerCharacter->GetCharacterMovement<UAnimationsHandbookCharacterMovementComponent>()->GetCurrentGait();
 }

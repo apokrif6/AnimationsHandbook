@@ -6,6 +6,7 @@
 #include "Animation/AnimInstance.h"
 #include "AnimationsHandbookAnimInstance.generated.h"
 
+enum class EGait : uint8;
 struct FLocomotionDirectionThresholds;
 enum class ELocomotionDirection : uint8;
 /**
@@ -25,6 +26,11 @@ public:
 	                                                  const ELocomotionDirection InLocomotionDirection,
 	                                                  const FLocomotionDirectionThresholds&
 	                                                  LocomotionDirectionThresholds);
+
+	//TODO
+	//replace with interface call/property access
+	UFUNCTION(BlueprintCallable, meta=(BlueprintThreadSafe))
+	EGait GetCurrentGait() const;
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Movement")
