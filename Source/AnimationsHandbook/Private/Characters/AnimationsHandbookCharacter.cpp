@@ -45,7 +45,7 @@ void AAnimationsHandbookCharacter::SetupPlayerInputComponent(UInputComponent* Pl
 
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ThisClass::Look);
 
-		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Started, this,
+		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Triggered, this,
 		                                   &ThisClass::EnableRunningMode);
 
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this,
