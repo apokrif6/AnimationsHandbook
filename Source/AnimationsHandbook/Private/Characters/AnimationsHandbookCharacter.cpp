@@ -33,6 +33,8 @@ void AAnimationsHandbookCharacter::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
+
+	GetMesh()->LinkAnimClassLayers(LocomotionAnimLayers);
 }
 
 void AAnimationsHandbookCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

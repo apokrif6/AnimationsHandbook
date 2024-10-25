@@ -21,6 +21,9 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Animations")
+	TSubclassOf<UAnimInstance> LocomotionAnimLayers;
+
 public:
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
@@ -42,6 +45,6 @@ private:
 	void Look(const FInputActionValue& Value);
 
 	void EnableRunningMode(const FInputActionValue& Value);
-	
+
 	void DisableRunningMode(const FInputActionValue& Value);
 };
