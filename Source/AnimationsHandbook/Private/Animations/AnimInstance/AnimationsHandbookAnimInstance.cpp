@@ -28,14 +28,7 @@ void UAnimationsHandbookAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		LocomotionAngle = UKismetAnimationLibrary::CalculateDirection(HorizontalVelocity,
 		                                                              OwnerCharacter->GetActorRotation());
 
-		//TODO
-		//move this to developer settings!
-		FLocomotionDirectionThresholds LocomotionDirectionThresholds;
-		LocomotionDirectionThresholds.Forward = {-50.f, 50.f};
-		LocomotionDirectionThresholds.Backward = {-130.f, 130.f};
-		LocomotionDirectionThresholds.Deadzone = 20.f;
-		LocomotionDirection = CalculateLocomotionDirection(LocomotionAngle, LocomotionDirection,
-		                                                   LocomotionDirectionThresholds);
+		LocomotionDirection = CalculateLocomotionDirection(LocomotionAngle, LocomotionDirection);
 
 		const FRotator AimRotation = OwnerCharacter->GetBaseAimRotation();
 		const FRotator MovementRotation = UKismetMathLibrary::MakeRotFromX(OwnerCharacter->GetVelocity());
@@ -47,47 +40,42 @@ void UAnimationsHandbookAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 }
 
 ELocomotionDirection UAnimationsHandbookAnimInstance::CalculateLocomotionDirection(
-	const float InLocomotionAngle, const ELocomotionDirection InLocomotionDirection,
-	const FLocomotionDirectionThresholds& LocomotionDirectionThresholds)
+	const float InLocomotionAngle, const ELocomotionDirection InLocomotionDirection) const
 {
+	const auto [Forward, Backward, Deadzone] = OwnerCharacter->GetCharacterMovement<
+		UAnimationsHandbookCharacterMovementComponent>()->GetLocomotionDirectionThresholds();
+
 	switch (InLocomotionDirection)
 	{
 	case ELocomotionDirection::Forward:
-		if (InLocomotionAngle >= LocomotionDirectionThresholds.Forward.Min - LocomotionDirectionThresholds.Deadzone &&
-			InLocomotionAngle <= LocomotionDirectionThresholds.Forward.Max + LocomotionDirectionThresholds.Deadzone)
+		if (InLocomotionAngle >= Forward.Min - Deadzone && InLocomotionAngle <= Forward.Max + Deadzone)
 		{
 			return ELocomotionDirection::Forward;
 		}
 	case ELocomotionDirection::Backward:
-		if (!(InLocomotionAngle >= LocomotionDirectionThresholds.Backward.Min + LocomotionDirectionThresholds.Deadzone
-			&&
-			InLocomotionAngle <= LocomotionDirectionThresholds.Backward.Max - LocomotionDirectionThresholds.Deadzone))
+		if (!(InLocomotionAngle >= Backward.Min + Deadzone && InLocomotionAngle <= Backward.Max - Deadzone))
 		{
 			return ELocomotionDirection::Backward;
 		}
 	case ELocomotionDirection::Left:
-		if (InLocomotionAngle >= LocomotionDirectionThresholds.Forward.Min + LocomotionDirectionThresholds.Deadzone &&
-			InLocomotionAngle <= LocomotionDirectionThresholds.Backward.Min - LocomotionDirectionThresholds.Deadzone)
+		if (InLocomotionAngle >= Forward.Min + Deadzone && InLocomotionAngle <= Backward.Min - Deadzone)
 		{
 			return ELocomotionDirection::Left;
 		}
 	case ELocomotionDirection::Right:
-		if (InLocomotionAngle >= LocomotionDirectionThresholds.Forward.Max - LocomotionDirectionThresholds.Deadzone &&
-			InLocomotionAngle <= LocomotionDirectionThresholds.Backward.Max + LocomotionDirectionThresholds.Deadzone)
+		if (InLocomotionAngle >= Forward.Max - Deadzone && InLocomotionAngle <= Backward.Max + Deadzone)
 
 		{
 			return ELocomotionDirection::Right;
 		}
 	}
 
-	if (!(InLocomotionAngle >= LocomotionDirectionThresholds.Backward.Min && InLocomotionAngle <=
-		LocomotionDirectionThresholds.Backward.Max))
+	if (!(InLocomotionAngle >= Backward.Min && InLocomotionAngle <= Backward.Max))
 	{
 		return ELocomotionDirection::Backward;
 	}
 
-	if (InLocomotionAngle >= LocomotionDirectionThresholds.Forward.Min && InLocomotionAngle <=
-		LocomotionDirectionThresholds.Forward.Max)
+	if (InLocomotionAngle >= Forward.Min && InLocomotionAngle <= Forward.Max)
 	{
 		return ELocomotionDirection::Forward;
 	}

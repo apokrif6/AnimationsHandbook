@@ -23,12 +23,8 @@ public:
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
 	ELocomotionDirection CalculateLocomotionDirection(const float InLocomotionAngle,
-	                                                  const ELocomotionDirection InLocomotionDirection,
-	                                                  const FLocomotionDirectionThresholds&
-	                                                  LocomotionDirectionThresholds);
+	                                                  const ELocomotionDirection InLocomotionDirection) const;
 
-	//TODO
-	//replace with interface call/property access
 	UFUNCTION(BlueprintCallable, meta=(BlueprintThreadSafe))
 	EGait GetCurrentGait() const;
 

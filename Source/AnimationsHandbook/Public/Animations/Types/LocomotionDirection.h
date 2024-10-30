@@ -15,14 +15,17 @@ enum class ELocomotionDirection : uint8
 	Right
 };
 
-USTRUCT()
+USTRUCT(BlueprintType)
 struct FLocomotionDirectionThresholds
 {
 	GENERATED_BODY()
 
-	TInterval<float> Forward;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Locomotion Direction")
+	FFloatInterval Forward{0.f, 0.f};
 
-	TInterval<float> Backward;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Locomotion Direction")
+	FFloatInterval Backward{0.f, 0.f};
 
-	float Deadzone;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Locomotion Direction")
+	float Deadzone = ForceInit;
 };

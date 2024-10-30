@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Gait.h"
+#include "Animations/Types/LocomotionDirection.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "AnimationsHandbookCharacterMovementComponent.generated.h"
 
@@ -23,11 +24,16 @@ public:
 
 	EGait GetCurrentGait() const { return CurrentGait; }
 
+	FLocomotionDirectionThresholds GetLocomotionDirectionThresholds() const { return LocomotionDirectionThresholds; }
+
 protected:
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gait")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Locomotion")
 	TMap<EGait, FGaitSettings> GaitSettings;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Locomotion")
+	FLocomotionDirectionThresholds LocomotionDirectionThresholds;
 
 private:
 	EGait CurrentGait = EGait::None;
