@@ -30,10 +30,17 @@ void UAnimationsHandbookAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 		LocomotionDirection = CalculateLocomotionDirection(LocomotionAngle, LocomotionDirection);
 
-		const FRotator AimRotation = OwnerCharacter->GetBaseAimRotation();
-		const FRotator MovementRotation = UKismetMathLibrary::MakeRotFromX(OwnerCharacter->GetVelocity());
+		//cache yaw, and subtract later
+		PreviousYaw = CurrentYaw;
 
-		OffsetYaw = UKismetMathLibrary::NormalizedDeltaRotator(MovementRotation, AimRotation).Yaw;
+		const FRotator ActorRotation = OwnerCharacter->GetActorRotation();
+		CurrentYaw = ActorRotation.Yaw;
+
+		YawDelta = CurrentYaw - PreviousYaw;
+
+		const float InterpolatedYaw = UKismetMathLibrary::SafeDivide(YawDelta, DeltaSeconds) / 4.f;
+
+		LeanAngle = FMath::ClampAngle(InterpolatedYaw, -90.f, 90.f);
 
 		bIsAccelerating = OwnerCharacter->GetCharacterMovement()->GetCurrentAcceleration().Length() > 0.f;
 	}

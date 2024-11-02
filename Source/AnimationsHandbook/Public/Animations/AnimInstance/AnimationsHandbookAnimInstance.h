@@ -30,16 +30,28 @@ public:
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Movement")
-	float Speed = 0.f;
+	float Speed = ForceInit;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Movement")
-	float LocomotionAngle = 0.f;
+	float LocomotionAngle = ForceInit;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Movement")
 	ELocomotionDirection LocomotionDirection;
 
+	UPROPERTY(BlueprintReadOnly, Category = "Movement|Yaw")
+	float CurrentYaw = ForceInit;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Movement|Yaw")
+	float PreviousYaw = ForceInit;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Movement|Yaw")
+	float YawDelta = ForceInit;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement|Yaw")
+	float YawInterpolationSpeed = 4.f;
+
 	UPROPERTY(BlueprintReadOnly, Category = "Movement")
-	float OffsetYaw = 0.f;
+	float LeanAngle = ForceInit;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Movement")
 	bool bIsAccelerating = false;
