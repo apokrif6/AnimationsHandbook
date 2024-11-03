@@ -55,8 +55,20 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Movement")
 	float LeanAngle = ForceInit;
 
-	UPROPERTY(BlueprintReadOnly, Category = "Movement")
+	UPROPERTY(BlueprintReadOnly, Category = "Movement|Acceleration")
 	bool bIsAccelerating = false;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Movement|Acceleration")
+	FVector PreviousVelocity2D{};
+
+	UPROPERTY(BlueprintReadOnly, Category = "Movement|Acceleration")
+	FVector Velocity2D{};
+
+	UPROPERTY(BlueprintReadOnly, Category = "Movement|Acceleration")
+	FVector Acceleration2D{};
+
+	UPROPERTY(BlueprintReadOnly, Category = "Movement|Acceleration")
+	FVector RelativeAcceleration{};
 
 private:
 	UPROPERTY()

@@ -42,7 +42,38 @@ void UAnimationsHandbookAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 		LeanAngle = FMath::ClampAngle(InterpolatedYaw, -90.f, 90.f);
 
+		//cache velocity 2d
+		PreviousVelocity2D = Velocity2D;
+		Velocity2D = OwnerCharacter->GetCharacterMovement()->Velocity * FVector{1.f, 1.f, 0};
+
+		Acceleration2D = (Velocity2D - PreviousVelocity2D) / DeltaSeconds;
+
 		bIsAccelerating = OwnerCharacter->GetCharacterMovement()->GetCurrentAcceleration().Length() > 0.f;
+
+		const float MaxAcceleration = bIsAccelerating
+			                              ? OwnerCharacter->GetCharacterMovement()->GetMaxAcceleration()
+			                              : OwnerCharacter->GetCharacterMovement()->GetMaxBrakingDeceleration();
+
+		const FVector NormalizedClampedAcceleration2D = Acceleration2D.GetClampedToMaxSize(MaxAcceleration) /
+			MaxAcceleration;
+
+		//need be moved to movement component setings
+		float GaitAccelerationMultiplier = 0.f;
+		switch (GetCurrentGait())
+		{
+		case EGait::None:
+			break;
+		case EGait::Walking:
+			GaitAccelerationMultiplier = 0.25f;
+			break;
+		case EGait::Running:
+			GaitAccelerationMultiplier = 0.7f;
+			break;
+		default: ;
+		}
+
+		RelativeAcceleration = ActorRotation.UnrotateVector(NormalizedClampedAcceleration2D) *
+			GaitAccelerationMultiplier;
 	}
 }
 
