@@ -32,6 +32,8 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Movement")
 	float Speed = ForceInit;
 
+	//TODO
+	//move this data to locomotion cycle specific structure
 	UPROPERTY(BlueprintReadOnly, Category = "Movement")
 	float LocomotionAngle = ForceInit;
 
