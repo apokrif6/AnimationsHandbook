@@ -9,7 +9,6 @@
 UENUM(Blueprintable)
 enum class EGait : uint8
 {
-	None UMETA(Hidden),
 	Walking,
 	Running
 };

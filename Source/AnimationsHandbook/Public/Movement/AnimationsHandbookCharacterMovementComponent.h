@@ -36,5 +36,5 @@ protected:
 	FLocomotionDirectionThresholds LocomotionDirectionThresholds;
 
 private:
-	EGait CurrentGait = EGait::None;
+	EGait CurrentGait;
 };

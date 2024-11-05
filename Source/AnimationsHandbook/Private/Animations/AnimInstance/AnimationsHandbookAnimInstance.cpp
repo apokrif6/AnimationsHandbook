@@ -21,14 +21,18 @@ void UAnimationsHandbookAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 	if (ensure(OwnerCharacter))
 	{
+		LocomotionCycleData.Gait = OwnerCharacter->GetCharacterMovement<UAnimationsHandbookCharacterMovementComponent>()
+		                                         ->GetCurrentGait();
+
 		FVector HorizontalVelocity = OwnerCharacter->GetVelocity();
 		HorizontalVelocity.Z = 0.f;
-		Speed = HorizontalVelocity.Size();
+		LocomotionCycleData.Speed = HorizontalVelocity.Size();
 
-		LocomotionAngle = UKismetAnimationLibrary::CalculateDirection(HorizontalVelocity,
-		                                                              OwnerCharacter->GetActorRotation());
+		LocomotionCycleData.LocomotionAngle = UKismetAnimationLibrary::CalculateDirection(HorizontalVelocity,
+			OwnerCharacter->GetActorRotation());
 
-		LocomotionDirection = CalculateLocomotionDirection(LocomotionAngle, LocomotionDirection);
+		LocomotionCycleData.LocomotionDirection = CalculateLocomotionDirection(
+			LocomotionCycleData.LocomotionAngle, LocomotionCycleData.LocomotionDirection);
 
 		//cache yaw, and subtract later
 		PreviousYaw = CurrentYaw;
@@ -40,7 +44,7 @@ void UAnimationsHandbookAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 		const float InterpolatedYaw = UKismetMathLibrary::SafeDivide(YawDelta, DeltaSeconds) / 4.f;
 
-		LeanAngle = FMath::ClampAngle(InterpolatedYaw, -90.f, 90.f);
+		LocomotionCycleData.LeanAngle = FMath::ClampAngle(InterpolatedYaw, -90.f, 90.f);
 
 		//cache velocity 2d
 		PreviousVelocity2D = Velocity2D;
@@ -57,12 +61,10 @@ void UAnimationsHandbookAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		const FVector NormalizedClampedAcceleration2D = Acceleration2D.GetClampedToMaxSize(MaxAcceleration) /
 			MaxAcceleration;
 
-		//need be moved to movement component setings
+		//need be moved to movement component settings
 		float GaitAccelerationMultiplier = 0.f;
-		switch (GetCurrentGait())
+		switch (LocomotionCycleData.Gait)
 		{
-		case EGait::None:
-			break;
 		case EGait::Walking:
 			GaitAccelerationMultiplier = 0.25f;
 			break;
@@ -72,7 +74,7 @@ void UAnimationsHandbookAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		default: ;
 		}
 
-		RelativeAcceleration = ActorRotation.UnrotateVector(NormalizedClampedAcceleration2D) *
+		LocomotionCycleData.RelativeAcceleration = ActorRotation.UnrotateVector(NormalizedClampedAcceleration2D) *
 			GaitAccelerationMultiplier;
 	}
 }
@@ -119,9 +121,4 @@ ELocomotionDirection UAnimationsHandbookAnimInstance::CalculateLocomotionDirecti
 	}
 
 	return InLocomotionAngle < 0 ? ELocomotionDirection::Left : ELocomotionDirection::Right;
-}
-
-EGait UAnimationsHandbookAnimInstance::GetCurrentGait() const
-{
-	return OwnerCharacter->GetCharacterMovement<UAnimationsHandbookCharacterMovementComponent>()->GetCurrentGait();
 }
