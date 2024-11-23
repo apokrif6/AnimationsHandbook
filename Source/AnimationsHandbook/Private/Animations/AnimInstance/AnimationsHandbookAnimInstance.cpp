@@ -47,10 +47,10 @@ void UAnimationsHandbookAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		LocomotionCycleData.LeanAngle = FMath::ClampAngle(InterpolatedYaw, -90.f, 90.f);
 
 		//cache velocity 2d
-		PreviousVelocity2D = Velocity2D;
-		Velocity2D = OwnerCharacter->GetCharacterMovement()->Velocity * FVector{1.f, 1.f, 0};
+		PreviousVelocity2D = LocomotionCycleData.Velocity2D;
+		LocomotionCycleData.Velocity2D = OwnerCharacter->GetCharacterMovement()->Velocity * FVector{1.f, 1.f, 0};
 
-		Acceleration2D = (Velocity2D - PreviousVelocity2D) / DeltaSeconds;
+		Acceleration2D = (LocomotionCycleData.Velocity2D - PreviousVelocity2D) / DeltaSeconds;
 
 		bIsAccelerating = OwnerCharacter->GetCharacterMovement()->GetCurrentAcceleration().Length() > 0.f;
 
@@ -77,6 +77,16 @@ void UAnimationsHandbookAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		LocomotionCycleData.RelativeAcceleration = ActorRotation.UnrotateVector(NormalizedClampedAcceleration2D) *
 			GaitAccelerationMultiplier;
 	}
+}
+
+UAnimationsHandbookCharacterMovementComponent* UAnimationsHandbookAnimInstance::GetCharacterMovementComponent() const
+{
+	if (OwnerCharacter)
+	{
+		return OwnerCharacter->GetCharacterMovement<UAnimationsHandbookCharacterMovementComponent>();
+	}
+
+	return nullptr;
 }
 
 ELocomotionDirection UAnimationsHandbookAnimInstance::CalculateLocomotionDirection(

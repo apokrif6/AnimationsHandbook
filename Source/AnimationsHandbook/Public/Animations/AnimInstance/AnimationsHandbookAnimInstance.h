@@ -7,6 +7,7 @@
 #include "Animations/LocomotionData/LocomotionCycleData.h"
 #include "AnimationsHandbookAnimInstance.generated.h"
 
+class UAnimationsHandbookCharacterMovementComponent;
 enum class EGait : uint8;
 struct FLocomotionDirectionThresholds;
 enum class ELocomotionDirection : uint8;
@@ -22,6 +23,9 @@ public:
 	virtual void NativeInitializeAnimation() override;
 
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
+
+	UFUNCTION(BlueprintCallable, meta=(BlueprintThreadSafe))
+	UAnimationsHandbookCharacterMovementComponent* GetCharacterMovementComponent() const;
 
 	ELocomotionDirection CalculateLocomotionDirection(const float InLocomotionAngle,
 	                                                  const ELocomotionDirection InLocomotionDirection) const;
@@ -50,8 +54,6 @@ private:
 	float YawDelta = ForceInit;
 
 	FVector PreviousVelocity2D{};
-
-	FVector Velocity2D{};
 
 	FVector Acceleration2D{};
 };

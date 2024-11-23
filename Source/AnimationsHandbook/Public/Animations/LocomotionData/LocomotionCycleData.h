@@ -14,7 +14,7 @@ enum class EGait : uint8;
 /**
  * Struct to pass necessary locomotion cycle data to editable and exposed anim nodes
  */
-USTRUCT(BlueprintType, Spawn)
+USTRUCT(BlueprintType)
 struct FLocomotionCycleData
 {
 	GENERATED_BODY()
@@ -36,6 +36,9 @@ struct FLocomotionCycleData
 
 	UPROPERTY(BlueprintReadOnly, Category = "Movement")
 	FVector Velocity{};
+
+	UPROPERTY(BlueprintReadOnly, Category = "Movement")
+	FVector Velocity2D{};
 
 	UPROPERTY(BlueprintReadOnly, Category = "Movement")
 	FVector RelativeAcceleration{};
