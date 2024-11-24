@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
 #include "Animations/LocomotionData/LocomotionCycleData.h"
+#include "Animations/LocomotionData/LocomotionStartData.h"
 #include "AnimationsHandbookAnimInstance.generated.h"
 
 class UAnimationsHandbookCharacterMovementComponent;
@@ -29,6 +30,13 @@ public:
 
 	ELocomotionDirection CalculateLocomotionDirection(const float InLocomotionAngle,
 	                                                  const ELocomotionDirection InLocomotionDirection) const;
+#pragma region StartState
+	UFUNCTION(BlueprintCallable, meta=(BlueprintThreadSafe))
+	void SetupStartState_Internal();
+
+	UFUNCTION(BlueprintCallable, meta=(BlueprintThreadSafe))
+	void UpdateStartState_Internal();
+#pragma endregion StartState
 
 protected:
 	//TODO
@@ -39,6 +47,9 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, Category = "Movement|Acceleration")
 	bool bIsAccelerating = false;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Movement|Locomotion")
+	FLocomotionStartData LocomotionStartData{};
 
 	UPROPERTY(BlueprintReadOnly, Category = "Movement|Locomotion")
 	FLocomotionCycleData LocomotionCycleData{};
@@ -56,4 +67,10 @@ private:
 	FVector PreviousVelocity2D{};
 
 	FVector Acceleration2D{};
+
+	FVector Location{};
+
+	FVector PreviousLocation{};
+
+	float LocationDelta = ForceInit;
 };

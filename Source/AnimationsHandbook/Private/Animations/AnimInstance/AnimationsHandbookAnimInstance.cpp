@@ -21,8 +21,14 @@ void UAnimationsHandbookAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 	if (ensure(OwnerCharacter))
 	{
+		LocomotionCycleData.PreviousGait = LocomotionCycleData.Gait;
 		LocomotionCycleData.Gait = OwnerCharacter->GetCharacterMovement<UAnimationsHandbookCharacterMovementComponent>()
 		                                         ->GetCurrentGait();
+
+		if (LocomotionCycleData.PreviousGait != LocomotionCycleData.Gait)
+		{
+			LocomotionCycleData.bGaitChanged = true;
+		}
 
 		FVector HorizontalVelocity = OwnerCharacter->GetVelocity();
 		HorizontalVelocity.Z = 0.f;
@@ -31,8 +37,14 @@ void UAnimationsHandbookAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		LocomotionCycleData.LocomotionAngle = UKismetAnimationLibrary::CalculateDirection(HorizontalVelocity,
 			OwnerCharacter->GetActorRotation());
 
+		LocomotionCycleData.PreviousLocomotionDirection = LocomotionCycleData.LocomotionDirection;
 		LocomotionCycleData.LocomotionDirection = CalculateLocomotionDirection(
 			LocomotionCycleData.LocomotionAngle, LocomotionCycleData.LocomotionDirection);
+
+		PreviousLocation = Location;
+		Location = OwnerCharacter->GetActorLocation();
+
+		LocationDelta = (Location - PreviousLocation).Size();
 
 		//cache yaw, and subtract later
 		PreviousYaw = CurrentYaw;
@@ -131,4 +143,14 @@ ELocomotionDirection UAnimationsHandbookAnimInstance::CalculateLocomotionDirecti
 	}
 
 	return InLocomotionAngle < 0 ? ELocomotionDirection::Left : ELocomotionDirection::Right;
+}
+
+void UAnimationsHandbookAnimInstance::SetupStartState_Internal()
+{
+	LocomotionStartData.StartDistance = 0.f;
+}
+
+void UAnimationsHandbookAnimInstance::UpdateStartState_Internal()
+{
+	LocomotionStartData.StartDistance += LocationDelta;
 }

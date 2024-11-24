@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "Animations/Types/LocomotionDirection.h"
 #include "Movement/Gait.h"
-#include "UObject/Object.h"
 #include "LocomotionCycleData.generated.h"
 
 enum class ELocomotionDirection : uint8;
@@ -29,7 +28,13 @@ struct FLocomotionCycleData
 	float LeanAngle = ForceInit;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Movement")
+	EGait PreviousGait = EGait::Walking;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Movement")
 	EGait Gait = EGait::Walking;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Movement")
+	ELocomotionDirection PreviousLocomotionDirection = ELocomotionDirection::Forward;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Movement")
 	ELocomotionDirection LocomotionDirection = ELocomotionDirection::Forward;
@@ -42,4 +47,7 @@ struct FLocomotionCycleData
 
 	UPROPERTY(BlueprintReadOnly, Category = "Movement")
 	FVector RelativeAcceleration{};
+
+	UPROPERTY(BlueprintReadOnly, Category = "Movement")
+	bool bGaitChanged = false;
 };
