@@ -4,11 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Animations/Types/LocomotionDirection.h"
-#include "Movement/Gait.h"
 #include "LocomotionCycleData.generated.h"
 
 enum class ELocomotionDirection : uint8;
-enum class EGait : uint8;
 
 /**
  * Struct to pass necessary locomotion cycle data to editable and exposed anim nodes
@@ -17,21 +15,6 @@ USTRUCT(BlueprintType)
 struct FLocomotionCycleData
 {
 	GENERATED_BODY()
-
-	UPROPERTY(BlueprintReadOnly, Category = "Movement|")
-	float Speed = ForceInit;
-
-	UPROPERTY(BlueprintReadOnly, Category = "Movement")
-	float LocomotionAngle = ForceInit;
-
-	UPROPERTY(BlueprintReadOnly, Category = "Movement")
-	float LeanAngle = ForceInit;
-
-	UPROPERTY(BlueprintReadOnly, Category = "Movement")
-	EGait PreviousGait = EGait::Walking;
-
-	UPROPERTY(BlueprintReadOnly, Category = "Movement")
-	EGait Gait = EGait::Walking;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Movement")
 	ELocomotionDirection PreviousLocomotionDirection = ELocomotionDirection::Forward;

@@ -10,9 +10,9 @@
 
 void UAnimationsHandbookAnimInstance::NativeInitializeAnimation()
 {
-	Super::NativeInitializeAnimation();
-
 	OwnerCharacter = Cast<ACharacter>(TryGetPawnOwner());
+
+	Super::NativeInitializeAnimation();
 }
 
 void UAnimationsHandbookAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -21,25 +21,25 @@ void UAnimationsHandbookAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 	if (ensure(OwnerCharacter))
 	{
-		LocomotionCycleData.PreviousGait = LocomotionCycleData.Gait;
-		LocomotionCycleData.Gait = OwnerCharacter->GetCharacterMovement<UAnimationsHandbookCharacterMovementComponent>()
+		LocomotionSharedData.PreviousGait = LocomotionSharedData.Gait;
+		LocomotionSharedData.Gait = OwnerCharacter->GetCharacterMovement<UAnimationsHandbookCharacterMovementComponent>()
 		                                         ->GetCurrentGait();
 
-		if (LocomotionCycleData.PreviousGait != LocomotionCycleData.Gait)
+		if (LocomotionSharedData.PreviousGait != LocomotionSharedData.Gait)
 		{
 			LocomotionCycleData.bGaitChanged = true;
 		}
 
 		FVector HorizontalVelocity = OwnerCharacter->GetVelocity();
 		HorizontalVelocity.Z = 0.f;
-		LocomotionCycleData.Speed = HorizontalVelocity.Size();
+		LocomotionSharedData.Speed = HorizontalVelocity.Size();
 
-		LocomotionCycleData.LocomotionAngle = UKismetAnimationLibrary::CalculateDirection(HorizontalVelocity,
+		LocomotionSharedData.LocomotionAngle = UKismetAnimationLibrary::CalculateDirection(HorizontalVelocity,
 			OwnerCharacter->GetActorRotation());
 
 		LocomotionCycleData.PreviousLocomotionDirection = LocomotionCycleData.LocomotionDirection;
 		LocomotionCycleData.LocomotionDirection = CalculateLocomotionDirection(
-			LocomotionCycleData.LocomotionAngle, LocomotionCycleData.LocomotionDirection);
+			LocomotionSharedData.LocomotionAngle, LocomotionCycleData.LocomotionDirection);
 
 		PreviousLocation = Location;
 		Location = OwnerCharacter->GetActorLocation();
@@ -56,7 +56,7 @@ void UAnimationsHandbookAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 		const float InterpolatedYaw = UKismetMathLibrary::SafeDivide(YawDelta, DeltaSeconds) / 4.f;
 
-		LocomotionCycleData.LeanAngle = FMath::ClampAngle(InterpolatedYaw, -90.f, 90.f);
+		LocomotionSharedData.LeanAngle = FMath::ClampAngle(InterpolatedYaw, -90.f, 90.f);
 
 		//cache velocity 2d
 		PreviousVelocity2D = LocomotionCycleData.Velocity2D;
@@ -75,7 +75,7 @@ void UAnimationsHandbookAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 		//need be moved to movement component settings
 		float GaitAccelerationMultiplier = 0.f;
-		switch (LocomotionCycleData.Gait)
+		switch (LocomotionSharedData.Gait)
 		{
 		case EGait::Walking:
 			GaitAccelerationMultiplier = 0.25f;

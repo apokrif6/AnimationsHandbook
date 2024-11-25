@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
 #include "Animations/LocomotionData/LocomotionCycleData.h"
+#include "Animations/LocomotionData/LocomotionSharedData.h"
 #include "Animations/LocomotionData/LocomotionStartData.h"
 #include "AnimationsHandbookAnimInstance.generated.h"
 
@@ -47,6 +48,9 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, Category = "Movement|Acceleration")
 	bool bIsAccelerating = false;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Movement|Locomotion")
+	FLocomotionSharedData LocomotionSharedData{};
 
 	UPROPERTY(BlueprintReadOnly, Category = "Movement|Locomotion")
 	FLocomotionStartData LocomotionStartData{};
