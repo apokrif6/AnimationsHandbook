@@ -40,9 +40,6 @@ public:
 #pragma endregion StartState
 
 protected:
-	//TODO
-	//move this data to locomotion cycle specific structure
-
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement|Yaw")
 	float YawInterpolationSpeed = 4.f;
 

@@ -10,6 +10,9 @@ struct FLocomotionStartData
 {
 	GENERATED_BODY()
 
-	UPROPERTY(BlueprintReadOnly, Category = "Movement|")
+	UPROPERTY(BlueprintReadOnly, Category = "Movement")
 	float StartDistance = ForceInit;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Movement")
+	float StartLocationDelta = ForceInit;
 };

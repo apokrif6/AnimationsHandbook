@@ -22,8 +22,9 @@ void UAnimationsHandbookAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	if (ensure(OwnerCharacter))
 	{
 		LocomotionSharedData.PreviousGait = LocomotionSharedData.Gait;
-		LocomotionSharedData.Gait = OwnerCharacter->GetCharacterMovement<UAnimationsHandbookCharacterMovementComponent>()
-		                                         ->GetCurrentGait();
+		LocomotionSharedData.Gait = OwnerCharacter
+		                            ->GetCharacterMovement<UAnimationsHandbookCharacterMovementComponent>()
+		                            ->GetCurrentGait();
 
 		if (LocomotionSharedData.PreviousGait != LocomotionSharedData.Gait)
 		{
@@ -43,8 +44,9 @@ void UAnimationsHandbookAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 		PreviousLocation = Location;
 		Location = OwnerCharacter->GetActorLocation();
-
 		LocationDelta = (Location - PreviousLocation).Size();
+
+		LocomotionStartData.StartLocationDelta = LocationDelta;
 
 		//cache yaw, and subtract later
 		PreviousYaw = CurrentYaw;
@@ -151,6 +153,7 @@ void UAnimationsHandbookAnimInstance::SetupStartState_Internal()
 }
 
 void UAnimationsHandbookAnimInstance::UpdateStartState_Internal()
+
 {
-	LocomotionStartData.StartDistance += LocationDelta;
+	LocomotionStartData.StartDistance += LocomotionStartData.StartLocationDelta;
 }
