@@ -21,6 +21,12 @@ struct FLocomotionSharedData
 	float LeanAngle = ForceInit;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Movement")
+	FVector Acceleration2D{};
+
+	UPROPERTY(BlueprintReadOnly, Category = "Movement")
+	FVector PivotAcceleration2D{};
+
+	UPROPERTY(BlueprintReadOnly, Category = "Movement")
 	EGait PreviousGait = EGait::Walking;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Movement")

@@ -37,8 +37,13 @@ public:
 
 	UFUNCTION(BlueprintCallable, meta=(BlueprintThreadSafe))
 	void UpdateStartState_Internal();
-#pragma endregion StartState
+#pragma endregion
 
+#pragma region PivotState
+	UFUNCTION(BlueprintCallable, meta=(BlueprintThreadSafe))
+	void SetupPivotState_Internal();
+#pragma endregion
+	
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement|Yaw")
 	float YawInterpolationSpeed = 4.f;
@@ -66,8 +71,6 @@ private:
 	float YawDelta = ForceInit;
 
 	FVector PreviousVelocity2D{};
-
-	FVector Acceleration2D{};
 
 	FVector Location{};
 

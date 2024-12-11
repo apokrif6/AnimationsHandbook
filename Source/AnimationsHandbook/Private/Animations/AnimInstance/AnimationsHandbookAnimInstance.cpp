@@ -64,7 +64,7 @@ void UAnimationsHandbookAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		PreviousVelocity2D = LocomotionCycleData.Velocity2D;
 		LocomotionCycleData.Velocity2D = OwnerCharacter->GetCharacterMovement()->Velocity * FVector{1.f, 1.f, 0};
 
-		Acceleration2D = (LocomotionCycleData.Velocity2D - PreviousVelocity2D) / DeltaSeconds;
+		LocomotionSharedData.Acceleration2D = (LocomotionCycleData.Velocity2D - PreviousVelocity2D) / DeltaSeconds;
 
 		bIsAccelerating = OwnerCharacter->GetCharacterMovement()->GetCurrentAcceleration().Length() > 0.f;
 
@@ -72,7 +72,7 @@ void UAnimationsHandbookAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 			                              ? OwnerCharacter->GetCharacterMovement()->GetMaxAcceleration()
 			                              : OwnerCharacter->GetCharacterMovement()->GetMaxBrakingDeceleration();
 
-		const FVector NormalizedClampedAcceleration2D = Acceleration2D.GetClampedToMaxSize(MaxAcceleration) /
+		const FVector NormalizedClampedAcceleration2D = LocomotionSharedData.Acceleration2D.GetClampedToMaxSize(MaxAcceleration) /
 			MaxAcceleration;
 
 		//need be moved to movement component settings
@@ -153,7 +153,11 @@ void UAnimationsHandbookAnimInstance::SetupStartState_Internal()
 }
 
 void UAnimationsHandbookAnimInstance::UpdateStartState_Internal()
-
 {
 	LocomotionStartData.StartDistance += LocomotionStartData.StartLocationDelta;
+}
+
+void UAnimationsHandbookAnimInstance::SetupPivotState_Internal()
+{
+	LocomotionSharedData.PivotAcceleration2D = LocomotionSharedData.Acceleration2D;
 }
