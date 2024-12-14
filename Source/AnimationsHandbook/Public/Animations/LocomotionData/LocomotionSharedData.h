@@ -18,6 +18,9 @@ struct FLocomotionSharedData
 	float LocomotionAngle = ForceInit;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Movement")
+	float AccelerationLocomotionAngle = ForceInit;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Movement")
 	float LeanAngle = ForceInit;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Movement")

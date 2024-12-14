@@ -23,6 +23,9 @@ struct FLocomotionCycleData
 	ELocomotionDirection LocomotionDirection = ELocomotionDirection::Forward;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Movement")
+	ELocomotionDirection AccelerationLocomotionDirection = ELocomotionDirection::Forward;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Movement")
 	FVector Velocity{};
 
 	UPROPERTY(BlueprintReadOnly, Category = "Movement")

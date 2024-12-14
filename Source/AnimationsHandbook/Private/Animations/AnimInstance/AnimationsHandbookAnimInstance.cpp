@@ -35,12 +35,20 @@ void UAnimationsHandbookAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		HorizontalVelocity.Z = 0.f;
 		LocomotionSharedData.Speed = HorizontalVelocity.Size();
 
-		LocomotionSharedData.LocomotionAngle = UKismetAnimationLibrary::CalculateDirection(HorizontalVelocity,
+		LocomotionSharedData.LocomotionAngle = UKismetAnimationLibrary::CalculateDirection(
+			HorizontalVelocity,
+			OwnerCharacter->GetActorRotation());
+
+		LocomotionSharedData.AccelerationLocomotionAngle = UKismetAnimationLibrary::CalculateDirection(
+			LocomotionSharedData.Acceleration2D,
 			OwnerCharacter->GetActorRotation());
 
 		LocomotionCycleData.PreviousLocomotionDirection = LocomotionCycleData.LocomotionDirection;
 		LocomotionCycleData.LocomotionDirection = CalculateLocomotionDirection(
 			LocomotionSharedData.LocomotionAngle, LocomotionCycleData.LocomotionDirection);
+
+		LocomotionCycleData.AccelerationLocomotionDirection = CalculateLocomotionDirection(
+			LocomotionSharedData.AccelerationLocomotionAngle, LocomotionCycleData.AccelerationLocomotionDirection);
 
 		PreviousLocation = Location;
 		Location = OwnerCharacter->GetActorLocation();
@@ -72,8 +80,8 @@ void UAnimationsHandbookAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 			                              ? OwnerCharacter->GetCharacterMovement()->GetMaxAcceleration()
 			                              : OwnerCharacter->GetCharacterMovement()->GetMaxBrakingDeceleration();
 
-		const FVector NormalizedClampedAcceleration2D = LocomotionSharedData.Acceleration2D.GetClampedToMaxSize(MaxAcceleration) /
-			MaxAcceleration;
+		const FVector NormalizedClampedAcceleration2D = LocomotionSharedData.Acceleration2D.GetClampedToMaxSize(
+				MaxAcceleration) / MaxAcceleration;
 
 		//need be moved to movement component settings
 		float GaitAccelerationMultiplier = 0.f;
